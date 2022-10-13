@@ -1,5 +1,7 @@
 package Seguidores;
 
+import Objects.Size;
+
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -26,36 +28,44 @@ public class GetFollowers extends Thread {
         }
     }
 
-    public void run(){
+    public void run(Size followers, Size follow, Size scroll){
         try {
-            getFollowers();
+            getFollowers(followers,follow, scroll);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-
-
-    public void getFollowers() throws InterruptedException {
+    public void getFollowers(Size followers, Size follow, Size scroll) throws InterruptedException {
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    x = follow.getX();
+                    y = follow.getY();
+                    robo.mouseMove(followers.getX(), followers.getY());
+                    mousePress();
+                    Thread.sleep(3000);
                     while (true) {
                         for (int i = 0; i < 10; i++) {
-                            if (i == 5 || i == 9) Thread.sleep(900000);
-                            robo.mouseMove(878, 427);
-                            Thread.sleep(1000);
-                            mousePress();
-                            Thread.sleep(1000);
-                            robo.mouseMove(866, 486);
-                            Thread.sleep(1000);
-                            mousePress();
-                            robo.mouseMove(874, 539);
-                            mousePress();
-                            Thread.sleep(1000);
+                            if (i == 5 || i == 9 || i == 3) Thread.sleep(900000);
+                            for (int j = 0; j < 6; j++){
+                                if (j !=0 ) {
+                                    y += 60;
+                                }else{
+                                    x = follow.getX();
+                                    y = follow.getY();
+                                }
+                                robo.mouseMove(x, y);
+                                Thread.sleep(1000);
+                                mousePress();
+                            }
 
-                            robo.mouseMove(934, 565);
+                            robo.mouseMove(scroll.getX(), scroll.getY());
+                            Thread.sleep(1000);
+                            mousePress();
+                            Thread.sleep(1000);
+                            mousePress();
                             Thread.sleep(1000);
                             mousePress();
                             Thread.sleep(1000);
@@ -81,6 +91,10 @@ public class GetFollowers extends Thread {
             }
         });
         t1.start();
+    }
+
+    private void followPeaple() throws InterruptedException {
+
     }
 
     private static void mousePress(){
